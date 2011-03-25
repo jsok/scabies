@@ -9,6 +9,8 @@ class User < ActiveRecord::Base
 
   attr_protected :id, :salt
 
+  has_many :bugs
+
   attr_accessor :password, :password_confirmation
 
   def self.authenticate(email, pass)
