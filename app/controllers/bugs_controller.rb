@@ -1,7 +1,8 @@
 class BugsController < ApplicationController
-  # GET /bugs
-  # GET /bugs.xml
+  # GET projects/1/bugs
+  # GET projects/1/bugs.xml
   def index
+    @project = Project.find(params[:project_id])
     @bugs = Bug.all
 
     respond_to do |format|
@@ -10,9 +11,10 @@ class BugsController < ApplicationController
     end
   end
 
-  # GET /bugs/1
-  # GET /bugs/1.xml
+  # GET projects/1/bugs/1
+  # GET projects/1/bugs/1.xml
   def show
+    @project = Project.find(params[:project_id])
     @bug = Bug.find(params[:id])
 
     respond_to do |format|
@@ -21,10 +23,11 @@ class BugsController < ApplicationController
     end
   end
 
-  # GET /bugs/new
-  # GET /bugs/new.xml
+  # GET /projects/1/bugs/new
+  # GET projects/1/bugs/new.xml
   def new
-    @bug = Bug.new
+    @project = Project.find(params[:project_id])
+    @bug = Bug.new(:project_id => params[:project_id])
 
     respond_to do |format|
       format.html # new.html.erb
@@ -32,19 +35,23 @@ class BugsController < ApplicationController
     end
   end
 
-  # GET /bugs/1/edit
+  # GET /projects/1/bugs/1/edit
   def edit
+    @project = Project.find(params[:project_id])
     @bug = Bug.find(params[:id])
   end
 
-  # POST /bugs
-  # POST /bugs.xml
+  # POST /projects/1/bugs
+  # POST /projects/1/bugs.xml
   def create
+    @project = Project.find(params[:project_id])
     @bug = Bug.new(params[:bug])
+    #@bug.project = @project
 
     respond_to do |format|
       if @bug.save
-        format.html { redirect_to(@bug, :notice => 'Bug was successfully created.') }
+        format.html { redirect_to(project_bug_url(@project, @bug),
+                      :notice => 'Bug was successfully created.') }
         format.xml  { render :xml => @bug, :status => :created, :location => @bug }
       else
         format.html { render :action => "new" }
@@ -53,14 +60,16 @@ class BugsController < ApplicationController
     end
   end
 
-  # PUT /bugs/1
-  # PUT /bugs/1.xml
+  # PUT projects/1/bugs/1
+  # PUT projects/1/bugs/1.xml
   def update
+    @project = Project.find(params[:project_id])
     @bug = Bug.find(params[:id])
 
     respond_to do |format|
       if @bug.update_attributes(params[:bug])
-        format.html { redirect_to(@bug, :notice => 'Bug was successfully updated.') }
+        format.html { redirect_to(project_bug_url(@project, @bug),
+                      :notice => 'Bug was successfully updated.') }
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }
@@ -69,14 +78,15 @@ class BugsController < ApplicationController
     end
   end
 
-  # DELETE /bugs/1
-  # DELETE /bugs/1.xml
+  # DELETE projects/1/bugs/1
+  # DELETE projects/1/bugs/1.xml
   def destroy
+    @project = Project.find(params[:project_id])
     @bug = Bug.find(params[:id])
     @bug.destroy
 
     respond_to do |format|
-      format.html { redirect_to(bugs_url) }
+      format.html { redirect_to(project_url(@project)) }
       format.xml  { head :ok }
     end
   end

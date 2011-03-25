@@ -1,5 +1,7 @@
 Scabies::Application.routes.draw do
-  resources :bugs
+  resources :projects do
+    resources :bugs
+  end
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
