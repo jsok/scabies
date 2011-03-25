@@ -14,7 +14,8 @@ class User < ActiveRecord::Base
   def self.authenticate(email, pass)
     u=find(:first, :conditions=>["email = ?", email])
     return nil if u.nil?
-    return u if User.encrypt(pass, u.salt)==u.hashed_password
+    return nil if User.encrypt(pass, u.salt)!=u.hashed_password
+    return u
     nil
   end
 
@@ -24,12 +25,12 @@ class User < ActiveRecord::Base
     self.hashed_password = User.encrypt(@password, self.salt)
   end
 
-  def send_new_password
-    new_pass = User.random_string(10)
-    self.password = self.password_confirmation = new_pass
-    self.save
-    Notifications.deliver_forgot_password(self.email, self.email, new_pass)
-  end
+  #def send_new_password
+  #  new_pass = User.random_string(10)
+  #  self.password = self.password_confirmation = new_pass
+  #  self.save
+  #  Notifications.deliver_forgot_password(self.email, self.email, new_pass)
+  #end
 
   protected
 

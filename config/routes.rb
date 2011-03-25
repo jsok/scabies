@@ -3,6 +3,13 @@ Scabies::Application.routes.draw do
     resources :bugs
   end
 
+  resources :user
+
+  match '/signup',    :controller => 'user', :action => 'new'
+  match '/dashboard', :controller => 'user', :action => 'show'
+  match '/login',     :controller => 'user', :action => 'index'
+  match '/logout',    :controller => 'user', :action => 'logout'
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
