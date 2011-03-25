@@ -17,11 +17,16 @@
   </div>
   <div class="field">
     <%= f.label :description %><br />
-    <%= f.text_field :description %>
+    <%= f.text_area :description %>
   </div>
   <div class="field">
-    <%= f.label :status %><br />
-    <%= f.text_field :status %>
+    <%= f.radio_button :status, "new" %>
+    <%= f.label "New" %>
+    <%= f.radio_button :status, "open" %>
+    <%= f.label "Open" %>
+    <%= f.radio_button :status, "closed" %>
+    <%= f.label "Closed" %>
+    <br />
   </div>
   <div class="actions">
     <%= f.submit %>
