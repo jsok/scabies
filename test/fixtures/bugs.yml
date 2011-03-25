@@ -1,13 +1,6 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
-one:
-  name: MyString
-  description: MyString
-  category: MyString
-  status: MyString
-
-two:
-  name: MyString
-  description: MyString
-  category: MyString
-  status: MyString
+#one:
+#  name: MyString
+#  description: MyString
+#  status: MyString
