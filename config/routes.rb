@@ -10,6 +10,8 @@ Scabies::Application.routes.draw do
   match '/login',     :controller => 'user', :action => 'index'
   match '/logout',    :controller => 'user', :action => 'logout'
 
+  root :to => "user#index"
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
