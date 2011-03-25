@@ -15,9 +15,9 @@ class ProjectsController < ApplicationController
   def show
     @project = Project.find(params[:id])
     @bugs = {:new => [], :open => [], :closed => []}
-    @bugs[:new] = Bug.find_all_by_status("new")
-    @bugs[:open] = Bug.find_all_by_status("open")
-    @bugs[:closed] = Bug.find_all_by_status("closed")
+    @bugs[:new] = @project.bugs.find_all_by_status("new")
+    @bugs[:open] = @project.bugs.find_all_by_status("open")
+    @bugs[:closed] = @project.bugs.find_all_by_status("closed")
 
     respond_to do |format|
       format.html # show.html.erb
