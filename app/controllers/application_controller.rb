@@ -15,6 +15,11 @@ class ApplicationController < ActionController::Base
     session[:user]
   end
 
+  def logged_in?
+    return session[:user] ? true : false
+  end
+  helper_method :logged_in?
+
   def redirect_to_stored
     if return_to = session[:return_to]
       session[:return_to]=nil
