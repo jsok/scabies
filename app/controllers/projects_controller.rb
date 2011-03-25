@@ -14,7 +14,10 @@ class ProjectsController < ApplicationController
   # GET /projects/1.xml
   def show
     @project = Project.find(params[:id])
-    @bugs = @project.bugs
+    @bugs = {:new => [], :open => [], :closed => []}
+    @bugs[:new] = Bug.find_all_by_status("new")
+    @bugs[:open] = Bug.find_all_by_status("open")
+    @bugs[:closed] = Bug.find_all_by_status("closed")
 
     respond_to do |format|
       format.html # show.html.erb

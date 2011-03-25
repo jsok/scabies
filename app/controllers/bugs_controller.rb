@@ -3,12 +3,7 @@ class BugsController < ApplicationController
   # GET projects/1/bugs.xml
   def index
     @project = Project.find(params[:project_id])
-    @bugs = Bug.all
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.xml  { render :xml => @bugs }
-    end
+    redirect_to project_url(@project)
   end
 
   # GET projects/1/bugs/1
@@ -68,7 +63,7 @@ class BugsController < ApplicationController
 
     respond_to do |format|
       if @bug.update_attributes(params[:bug])
-        format.html { redirect_to(project_bug_url(@project, @bug),
+        format.html { redirect_to(project_url(@project),
                       :notice => 'Bug was successfully updated.') }
         format.xml  { head :ok }
       else
