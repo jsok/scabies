@@ -3,7 +3,7 @@
 <table>
   <% @bugs.each do |category, bugs| %>
     <tr>
-      <th colspan="6"><%= category.capitalize %></th>
+      <th colspan="6"><%= category.to_s.capitalize %></th>
     </tr>
     <tr>
       <th>Name</th>
