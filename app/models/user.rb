@@ -9,7 +9,8 @@ class User < ActiveRecord::Base
 
   attr_protected :id, :salt
 
-  has_many :bugs
+  has_and_belongs_to_many :watched_bugs, :class_name => "Bug", :join_table => "users_watched_bugs"
+  has_and_belongs_to_many :projects
 
   attr_accessor :password, :password_confirmation
 

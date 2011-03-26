@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110325204042) do
+ActiveRecord::Schema.define(:version => 20110326122527) do
 
   create_table "bugs", :force => true do |t|
     t.string   "name"
@@ -19,7 +19,8 @@ ActiveRecord::Schema.define(:version => 20110325204042) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "project_id"
-    t.integer  "user_id"
+    t.integer  "creator_id"
+    t.integer  "assignee_id"
   end
 
   create_table "projects", :force => true do |t|
@@ -27,6 +28,12 @@ ActiveRecord::Schema.define(:version => 20110325204042) do
     t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "admin_id"
+  end
+
+  create_table "projects_users", :id => false, :force => true do |t|
+    t.integer "projects_id"
+    t.integer "users_id"
   end
 
   create_table "users", :force => true do |t|
@@ -36,6 +43,11 @@ ActiveRecord::Schema.define(:version => 20110325204042) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "name"
+  end
+
+  create_table "users_watched_bugs", :id => false, :force => true do |t|
+    t.integer "watcher_id"
+    t.integer "watched_bug_id"
   end
 
 end
