@@ -32,8 +32,8 @@ ActiveRecord::Schema.define(:version => 20110326122527) do
   end
 
   create_table "projects_users", :id => false, :force => true do |t|
-    t.integer "projects_id"
-    t.integer "users_id"
+    t.integer "project_id"
+    t.integer "user_id"
   end
 
   create_table "users", :force => true do |t|

@@ -1,8 +1,8 @@
 class CreateProjectsUsersTable < ActiveRecord::Migration
   def self.up
     create_table :projects_users, :id => false do |t|
-      t.references :projects
-      t.references :users
+      t.references :project
+      t.references :user
     end
   end
 
