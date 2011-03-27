@@ -46,8 +46,8 @@ ActiveRecord::Schema.define(:version => 20110326122527) do
   end
 
   create_table "users_watched_bugs", :id => false, :force => true do |t|
-    t.integer "watcher_id"
-    t.integer "watched_bug_id"
+    t.integer "user_id"
+    t.integer "bug_id"
   end
 
 end

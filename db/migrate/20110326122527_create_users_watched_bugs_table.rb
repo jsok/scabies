@@ -1,8 +1,8 @@
 class CreateUsersWatchedBugsTable < ActiveRecord::Migration
   def self.up
     create_table :users_watched_bugs, :id => false do |t|
-      t.references :watcher
-      t.references :watched_bug
+      t.references :user
+      t.references :bug
     end
   end
 
