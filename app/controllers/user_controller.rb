@@ -3,7 +3,7 @@ class UserController < ApplicationController
 
   # GET /user
   def index
-    if current_user()
+    if logged_in?
       redirect_to dashboard_url
     else
       @user = User.new
@@ -12,7 +12,8 @@ class UserController < ApplicationController
 
   # GET /user/1
   def show
-    @user = User.find_by_email(session[:user])
+    @user = get_current_user()
+    @watched_bugs = Bug.find_by_creator(@user)
 
     respond_to do |format|
       format.html # show.html.erb
@@ -21,7 +22,7 @@ class UserController < ApplicationController
 
   # GET /user/new
   def new
-    if current_user()
+    if logged_in?
       redirect_to dashboard_url
     else
       @user = User.new
@@ -48,18 +49,17 @@ class UserController < ApplicationController
           format.html { redirect_to(login_url,
                                     :notice => 'Login was unsuccessful.') }
         else
-          session[:user] = @user.email
-          format.html { redirect_to(dashboard_url, :id => @user.id,
-                                    :notice => 'Welcome back.') }
+          session[:user_email] = @user.email
+          format.html { redirect_to_stored }
         end
       end
     else
       respond_to do |format|
         if @user.save
-          session[:user] = User.authenticate(@user.email, @user.password).email
+          session[:user_email] = User.authenticate(@user.email, @user.password).email
 
           format.html { redirect_to(dashboard_url, :id => @user.id,
-                                    :notice => 'User was successfully created.') }
+                                    :notice => 'Signup was successful.') }
         else
           format.html { redirect_to(signup_url,
                                     :notice => 'Signup was unsuccessful.') }
@@ -83,7 +83,7 @@ class UserController < ApplicationController
 
   # GET /user/logout
   def logout
-    session[:user] = nil
+    session[:user_email] = nil
     flash[:message] = 'Logged out'
     redirect_to login_url
   end
