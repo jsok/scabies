@@ -19,6 +19,20 @@
     <%= f.label :description %><br />
     <%= f.text_area :description %>
   </div>
+  <% if @admin %>
+    <!-- Disable changing admin user
+    <div class="field">
+      <%# f.label :admin %><br />
+      <%# f.collection_select :admin_id, @users, :id, :email, { :selected => @project.admin_id } %>
+    </div>
+    -->
+    <div class="field">
+      <%= form_for :users do |user_form| %>
+        <%= f.label :users %><br />
+        <%= f.collection_select :user_ids, @users, :id, :email, { :selected =>  @project.user_ids }, { "multiple" => true, "size" => 10 } %>
+      <% end %>
+    </div>
+  <% end %>
   <div class="actions">
     <%= f.submit %>
   </div>

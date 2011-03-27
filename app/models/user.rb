@@ -12,6 +12,8 @@ class User < ActiveRecord::Base
   has_and_belongs_to_many :watched_bugs, :class_name => "Bug", :join_table => "users_watched_bugs"
   has_and_belongs_to_many :projects
 
+  scope :find_all_without_user, lambda{|user| user ? {:conditions => ["id != ?", user.id]} : {} }
+
   attr_accessor :password, :password_confirmation
 
   def self.authenticate(email, pass)
