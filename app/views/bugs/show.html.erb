@@ -15,6 +15,20 @@
   <%= @bug.status %>
 </p>
 
+<p>
+  <b>Created by:</b>
+  <%= @bug.creator.name.to_s + " <" + @bug.creator.email.to_s + ">" %>
+</p>
+
+<p>
+  <b>Assigned to:</b>
+  <%= @bug.assignee.present? ? @bug.assignee.name.to_s + " <" + @bug.assignee.email.to_s + ">" : "Unassigned" %>
+  <%= form_for([@project, @bug]) do |f| %>
+    <%= f.hidden_field :id %>
+    <%= f.collection_select :assignee_id, @users, :id, :email, { :selected =>  @user.id } %>
+    <%= f.submit (@bug.assignee.present? ? "Reassign" : "Assign") %>
+  <% end %>
+</p>
 
 <%= link_to 'Edit', edit_project_bug_path(@project, @bug) %> |
 <%= link_to 'Back', project_path(@project) %>

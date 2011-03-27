@@ -17,11 +17,11 @@ class ProjectsController < ApplicationController
   # GET /projects/1
   # GET /projects/1.xml
   def show
-    @project = Project.find(params[:id])
+    @project = Project.find_by_id(params[:id])
     @user = get_current_user
 
     respond_to do |format|
-      if @project.users.exists?(@user)
+      if @project and @project.users.exists?(@user)
         @bugs = {:new => [], :open => [], :closed => []}
         @bugs[:new] = @project.bugs.find_all_by_status("new")
         @bugs[:open] = @project.bugs.find_all_by_status("open")
@@ -51,10 +51,12 @@ class ProjectsController < ApplicationController
 
   # GET /projects/1/edit
   def edit
-    @project = Project.find(params[:id])
+    @project = Project.find_by_id(params[:id])
     @admin = get_current_user
     @users = User.find_all_without_user(@admin)
-    if @project.admin != @admin
+    if @project.nil?
+      redirect_to(projects_url, :notice => 'Specified project does not exist')
+    elsif @project.admin != @admin
       redirect_to(projects_url, :notice => 'You cannot edit this project')
     end
   end
@@ -109,10 +111,10 @@ class ProjectsController < ApplicationController
   # DELETE /projects/1.xml
   def destroy
     @user = get_current_user
-    @project = Project.find(params[:id])
+    @project = Project.find_by_id(params[:id])
 
     respond_to do |format|
-      if @project.admin == @user
+      if @project and @project.admin == @user
         @project.destroy
         format.html { redirect_to(projects_url) }
         format.xml  { head :ok }
