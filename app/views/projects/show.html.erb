@@ -1,7 +1,7 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <b>Name:</b>
+  <b>Project:</b>
   <%= @project.name %>
 </p>
 
@@ -10,7 +10,9 @@
   <%= @project.description %>
 </p>
 
-<%= render 'bugs/list' %>
+<%= render :partial => 'bugs/list', :locals => { :title => 'Project Bugs' } %>
+
+<%= link_to 'New Bug', new_project_bug_path(@project) %> <br />
 
 <%= link_to 'Edit', edit_project_path(@project) %> |
 <%= link_to 'Back', projects_path %>

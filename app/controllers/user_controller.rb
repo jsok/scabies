@@ -13,7 +13,9 @@ class UserController < ApplicationController
   # GET /user/1
   def show
     @user = get_current_user()
-    @watched_bugs = Bug.find_by_creator(@user)
+    @bugs = {:created => [], :assigned => []}
+    @bugs[:created] = Bug.find_all_by_creator_id(@user)
+    @bugs[:assigned] = Bug.find_all_by_assignee_id(@user)
 
     respond_to do |format|
       format.html # show.html.erb
