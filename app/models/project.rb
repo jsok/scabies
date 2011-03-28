@@ -9,7 +9,6 @@ class Project < ActiveRecord::Base
 
   def to_param
     return permalink unless permalink.blank?
-    #name.to_url
   end
 
 end
