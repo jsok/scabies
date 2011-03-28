@@ -2,7 +2,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
 
   def login_required
-    if session[:user_email]
+    if session[:user]
       return true
     end
     flash[:warning]='Please login to continue'
@@ -14,14 +14,14 @@ class ApplicationController < ActionController::Base
 
   def get_current_user
     if logged_in?
-      User.find_by_email(session[:user_email])
+      User.find_by_login(session[:user])
     else
       return nil
     end
   end
 
   def logged_in?
-    return session[:user_email] ? true : false
+    return session[:user] ? true : false
   end
   helper_method :logged_in?
 

@@ -45,20 +45,20 @@ class UserController < ApplicationController
     @user = User.new(params[:user])
     # Are we signing up a new user?
     if !params[:user][:password_confirmation].present?
-      @user = User.authenticate(@user.email, @user.password)
+      @user = User.authenticate(@user.login, @user.password)
       respond_to do |format|
         if @user.nil?
           format.html { redirect_to(login_url,
                                     :notice => 'Login was unsuccessful.') }
         else
-          session[:user_email] = @user.email
+          session[:user] = @user.login
           format.html { redirect_to_stored }
         end
       end
     else
       respond_to do |format|
         if @user.save
-          session[:user_email] = User.authenticate(@user.email, @user.password).email
+          session[:user] = User.authenticate(@user.login, @user.password).login
 
           format.html { redirect_to(dashboard_url, :id => @user.id,
                                     :notice => 'Signup was successful.') }
@@ -85,7 +85,7 @@ class UserController < ApplicationController
 
   # GET /user/logout
   def logout
-    session[:user_email] = nil
+    session[:user] = nil
     flash[:message] = 'Logged out'
     redirect_to login_url
   end

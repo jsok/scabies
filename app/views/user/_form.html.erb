@@ -13,10 +13,14 @@
   <% end %>
 
   <div class="field">
+    <%= f.label :login %><br />
+    <%= f.text_field :login %>
+  </div>
+<% if signup %>
+  <div class="field">
     <%= f.label :email %><br />
     <%= f.text_field :email %>
   </div>
-<% if signup %>
   <div class="field">
     <%= f.label :name %><br />
     <%= f.text_field :name %>
@@ -34,11 +38,7 @@
 <% end %>
 
   <div class="actions">
-<% if signup %>
-    <%= f.submit "Signup" %>
-<% else %>
-    <%= f.submit "Login" %>
-<% end %>
+    <%= f.submit if signup ? "Signup" : "Login" %>
   </div>
 <% end %>
 
