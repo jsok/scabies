@@ -1,5 +1,6 @@
-PATH
-  remote: state_machine
+GIT
+  remote: git://github.com/pluginaweek/state_machine.git
+  revision: 72c659d4113a2e81d2538280933eab522f058c52
   specs:
     state_machine (0.10.1)
 
