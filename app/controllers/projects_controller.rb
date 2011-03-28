@@ -88,10 +88,10 @@ class ProjectsController < ApplicationController
     if !params[:project][:user_ids]
       params[:project][:user_ids] = []
     end
-    params[:project][:user_ids] << @project.admin.id
+    params[:project][:user_ids] << @project.admin.id.to_s
 
     @project.users.each do |u|
-      if !params[:project][:user_ids].include?(u.id)
+      if !params[:project][:user_ids].include?(u.id.to_s)
         u.projects.delete(@project)
       end
     end
