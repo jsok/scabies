@@ -16,10 +16,6 @@ class UserController < ApplicationController
     @bugs = {:created => [], :assigned => []}
     @bugs[:created] = Bug.find_all_by_creator_id(@user)
     @bugs[:assigned] = Bug.find_all_by_assignee_id(@user)
-
-    respond_to do |format|
-      format.html # show.html.erb
-    end
   end
 
   # GET /user/new
@@ -28,59 +24,62 @@ class UserController < ApplicationController
       redirect_to dashboard_url
     else
       @user = User.new
-
-      respond_to do |format|
-        format.html # new.html.erb
-      end
     end
   end
 
   # GET /user/1/edit
   def edit
-    #@user = User.find(params[:id])
+    @user = get_current_user
   end
 
   # POST /user
   def create
     @user = User.new(params[:user])
-    # Are we signing up a new user?
+    # Are we logging in?
     if !params[:user][:password_confirmation].present?
       @user = User.authenticate(@user.login, @user.password)
-      respond_to do |format|
-        if @user.nil?
-          format.html { redirect_to(login_url,
-                                    :notice => 'Login was unsuccessful.') }
-        else
-          session[:user] = @user.login
-          format.html { redirect_to_stored }
-        end
+      if @user.nil?
+        redirect_to(login_url, :notice => 'Login was unsuccessful.')
+      else
+        session[:user] = @user.login
+        redirect_to_stored
       end
-    else
-      respond_to do |format|
-        if @user.save
-          session[:user] = User.authenticate(@user.login, @user.password).login
 
-          format.html { redirect_to(dashboard_url, :id => @user.id,
-                                    :notice => 'Signup was successful.') }
-        else
-          format.html { redirect_to(signup_url,
-                                    :notice => 'Signup was unsuccessful.') }
-        end
+    # We are signing up a new account
+    else
+      if @user.save
+        session[:user] = User.authenticate(@user.login, @user.password).login
+
+        redirect_to(dashboard_url, :id => @user.id, :notice => 'Signup was successful.')
+      else
+        render :action => "new"
       end
     end
   end
 
   # PUT /user/1
   def update
-    #@user = User.find(params[:id])
+    if logged_in?
+      @user = User.authenticate(get_current_user.login, params[:user][:current_password])
 
-    #respond_to do |format|
-    #  if @user.update_attributes(params[:user])
-    #    format.html { redirect_to(@user, :notice => 'User was successfully updated.') }
-    #  else
-    #    format.html { render :action => "edit" }
-    #  end
-    #end
+      if params[:user][:password].empty? and params[:user][:password_confirmation].empty?
+        params[:user][:password] = params[:user][:current_password]
+        params[:user][:password_confirmation] = params[:user][:current_password]
+      end
+      params[:user].delete :current_password
+    end
+
+    if @user
+      @user.update_attributes(params[:user])
+      if @user.save
+        redirect_to(dashboard_url, :id => @user.id,
+                    :notice => 'Details updated successfully.')
+      else
+        render :action => "edit"
+      end
+    else
+      render :action => "edit"
+    end
   end
 
   # GET /user/logout

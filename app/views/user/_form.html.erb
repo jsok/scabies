@@ -1,5 +1,3 @@
-<%= form_for(@user, :url => user_index_path) do |f| %>
-
   <% if @user.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
@@ -12,33 +10,58 @@
     </div>
   <% end %>
 
+<% if mode == "login" or mode == "signup" %>
   <div class="field">
     <%= f.label :login %><br />
     <%= f.text_field :login %>
   </div>
-<% if signup %>
+<% end %>
+
+<% if mode == "signup" %>
   <div class="field">
     <%= f.label :email %><br />
     <%= f.text_field :email %>
   </div>
+<% end %>
+
+<% if mode == "signup" or mode == "edit" %>
   <div class="field">
     <%= f.label :name %><br />
     <%= f.text_field :name %>
   </div>
 <% end %>
+
+<% if mode == "signup" or mode == "login" %>
   <div class="field">
     <%= f.label :password %><br />
     <%= f.password_field :password %>
   </div>
-<% if signup %>
+<% end %>
+
+<% if mode == "edit" %>
+  <div class="field">
+    <%= f.label "Current Password" %><br />
+    <%= password_field_tag "user[current_password]" %>
+  </div>
+  <div class="field">
+    <%= f.label "New Password" %><br />
+    <%= f.password_field :password %>
+  </div>
+<% end %>
+
+<% if mode == "signup" or mode == "edit" %>
   <div class="field">
     <%= f.label :password_confirmation %><br />
     <%= f.password_field :password_confirmation %>
   </div>
 <% end %>
 
-  <div class="actions">
-    <%= f.submit if signup ? "Signup" : "Login" %>
-  </div>
-<% end %>
-
+<div class="actions">
+  <% if mode == "signup" %>
+    <%= f.submit "Signup" %>
+  <% elsif mode == "login" %>
+    <%= f.submit "Login" %>
+  <% else mode == "edit" %>
+    <%= f.submit "Update" %>
+  <% end %>
+</div>

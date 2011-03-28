@@ -27,10 +27,8 @@
     </div>
     -->
     <div class="field">
-      <%= form_for :users do |user_form| %>
-        <%= f.label :users %><br />
-        <%= f.collection_select :user_ids, @users, :id, :email, { :selected =>  @project.user_ids }, { "multiple" => true, "size" => 10 } %>
-      <% end %>
+      <%= f.label :users %><br />
+      <%= f.collection_select :user_ids, @users, :id, :email, { :selected =>  @project.user_ids }, { "multiple" => true, "size" => 10 } %>
     </div>
   <% end %>
   <div class="actions">

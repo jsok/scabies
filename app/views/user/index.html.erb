@@ -2,6 +2,8 @@
 
 <p id="notice"><%= notice %></p>
 
-<%= render :partial => 'form', :locals => {:signup => false} %>
+<%= form_for(@user, :url => user_index_path) do |f| %>
+  <%= render :partial => 'form', :locals => {:f => f, :mode => "login"} %>
+<% end %>
 
 <%= link_to "Sign Up", signup_path %>
