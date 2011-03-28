@@ -17,7 +17,7 @@ class ProjectsController < ApplicationController
   # GET /projects/1
   # GET /projects/1.xml
   def show
-    @project = Project.find_by_id(params[:id])
+    @project = Project.find_by_permalink(params[:id])
     @user = get_current_user
 
     respond_to do |format|
@@ -48,7 +48,7 @@ class ProjectsController < ApplicationController
 
   # GET /projects/1/edit
   def edit
-    @project = Project.find_by_id(params[:id])
+    @project = Project.find_by_permalink(params[:id])
     @admin = get_current_user
     @users = User.find_all_without_user(@admin)
     if @project.nil?
@@ -65,6 +65,7 @@ class ProjectsController < ApplicationController
     @user = get_current_user
     @project.admin = @user
     @project.users << @user
+    @project.permalink = @project.permalink.parameterize
 
     respond_to do |format|
       if @project.save
@@ -80,7 +81,9 @@ class ProjectsController < ApplicationController
   # PUT /projects/1
   # PUT /projects/1.xml
   def update
-    @project = Project.find(params[:id])
+    @project = Project.find_by_permalink(params[:id])
+
+    params[:project][:permalink] = params[:project][:permalink].parameterize
 
     if !params[:project][:user_ids]
       params[:project][:user_ids] = []
@@ -108,7 +111,7 @@ class ProjectsController < ApplicationController
   # DELETE /projects/1.xml
   def destroy
     @user = get_current_user
-    @project = Project.find_by_id(params[:id])
+    @project = Project.find_by_permalink(params[:id])
 
     respond_to do |format|
       if @project and @project.admin == @user

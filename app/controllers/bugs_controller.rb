@@ -11,7 +11,7 @@ class BugsController < ApplicationController
   # GET projects/1/bugs/1.xml
   def show
     @user = get_current_user
-    @project = Project.find_by_id(params[:project_id])
+    @project = Project.find_by_permalink(params[:project_id])
     @bug = @project.bugs.find_by_id(params[:id])
     @users = User.all
 
@@ -29,7 +29,7 @@ class BugsController < ApplicationController
   # GET projects/1/bugs/new.xml
   def new
     @user = get_current_user
-    @project = @user.projects.find_by_id(params[:project_id])
+    @project = @user.projects.find_by_permalink(params[:project_id])
     @bug = Bug.new(:project => @project, :creator => @user)
 
     respond_to do |format|
@@ -44,7 +44,7 @@ class BugsController < ApplicationController
 
   # GET /projects/1/bugs/1/edit
   def edit
-    @project = Project.find_by_id(params[:project_id])
+    @project = Project.find_by_permalink(params[:project_id])
     @bug = Bug.find_by_id(params[:id])
     @user = get_current_user
 
@@ -61,7 +61,7 @@ class BugsController < ApplicationController
   # POST /projects/1/bugs
   # POST /projects/1/bugs.xml
   def create
-    @project = Project.find(params[:project_id])
+    @project = Project.find_by_permalink(params[:project_id])
     @bug = Bug.new(params[:bug])
     @bug.project = @project
     @bug.creator = get_current_user
@@ -81,7 +81,7 @@ class BugsController < ApplicationController
   # PUT projects/1/bugs/1
   # PUT projects/1/bugs/1.xml
   def update
-    @project = Project.find(params[:project_id])
+    @project = Project.find_by_permalink(params[:project_id])
     @bug = Bug.find(params[:id])
 
     if params[:bug][:state]
@@ -114,7 +114,7 @@ class BugsController < ApplicationController
   # DELETE projects/1/bugs/1
   # DELETE projects/1/bugs/1.xml
   def destroy
-    @project = Project.find_by_id(params[:project_id])
+    @project = Project.find_by_permalink(params[:project_id])
     @bug = Bug.find_by_id(params[:id])
 
     respond_to do |format|
