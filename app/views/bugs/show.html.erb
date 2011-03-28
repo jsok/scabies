@@ -11,13 +11,13 @@
 </p>
 
 <p>
-  <b>Status:</b>
-  <%= @bug.status %>
+  <b>State:</b>
+  <%= @bug.state %>
 </p>
 
 <p>
   <b>Created by:</b>
-  <%= @bug.creator.name.to_s + " <" + @bug.creator.email.to_s + ">" %>
+  <%= @bug.creator.login.to_s + " <" + @bug.creator.email.to_s + ">" %>
 </p>
 
 <p>

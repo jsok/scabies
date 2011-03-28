@@ -22,10 +22,7 @@ class ProjectsController < ApplicationController
 
     respond_to do |format|
       if @project and @project.users.exists?(@user)
-        @bugs = {:new => [], :open => [], :closed => []}
-        @bugs[:new] = @project.bugs.find_all_by_status("new")
-        @bugs[:open] = @project.bugs.find_all_by_status("open")
-        @bugs[:closed] = @project.bugs.find_all_by_status("closed")
+        @bugs = @project.bugs
 
         format.html # show.html.erb
         format.xml  { render :xml => @project }

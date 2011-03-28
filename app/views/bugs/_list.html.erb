@@ -1,27 +1,19 @@
 <h1><%= title %></h1>
 
 <table>
-  <% @bugs.each do |category, bugs| %>
-    <% if bugs.present? %>
-      <tr>
-        <th colspan="4"><%= category.to_s.capitalize %></th>
-      </tr>
       <tr>
         <th>ID</th>
         <th>Name</th>
         <th>Description</th>
-        <th>Status</th>
+        <th>State</th>
       </tr>
-
-      <% bugs.each do |bug| %>
-        <tr>
-          <td><%= link_to bug.id, project_bug_path(bug.project, bug) %></td>
-          <td><%= link_to bug.name, project_bug_path(bug.project, bug) %></td>
-          <td><%= bug.description %></td>
-          <td><%= bug.status %></td>
-        </tr>
-      <% end %>
-    <% end %>
+  <% @bugs.each do |bug| %>
+    <tr>
+      <td><%= link_to bug.id, project_bug_path(bug.project, bug) %></td>
+      <td><%= link_to bug.name, project_bug_path(bug.project, bug) %></td>
+      <td><%= bug.description %></td>
+      <td><%= bug.state %></td>
+    </tr>
   <% end %>
 </table>
 
