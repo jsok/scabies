@@ -7,6 +7,8 @@ gem 'rails', '3.0.5'
 
 gem 'sqlite3'
 
+gem 'state_machine', :git => 'git://github.com/pluginaweek/state_machine.git'
+
 # Use unicorn as the web server
 # gem 'unicorn'
 
