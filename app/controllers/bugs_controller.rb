@@ -99,11 +99,11 @@ class BugsController < ApplicationController
         render :action => "show"
         return
       end
-      @bug.fire_events(next_event)
       params[:bug].delete :next_event
     end
 
     if @bug.update_attributes(params[:bug])
+      @bug.fire_events(next_event)
       redirect_to(project_bug_url(@project, @bug),
                   :notice => 'Bug was successfully updated.')
     else

@@ -10,11 +10,17 @@ class Bug < ActiveRecord::Base
     event :assign do
       transition :new => :assigned
     end
+    state :assigned do
+      validates_presence_of :assignee
+    end
 
     event :reassign do
-      assignee = nil
       transition :assigned => :new
       transition :opened => :new
+    end
+    after_transition :to => :new do |bug, transition|
+      bug.assignee = nil
+      bug.save
     end
 
     event :open do
@@ -35,10 +41,6 @@ class Bug < ActiveRecord::Base
 
     event :reopen do
       transition :closed => :new
-    end
-
-    state :assigned do
-      validates_presence_of :assignee
     end
 
   end

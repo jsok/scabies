@@ -29,7 +29,6 @@
 <% @bug.valid_events(@user).each do |event| %>
 
   <%= form_for([@project, @bug]) do |f| %>
-    <%= f.hidden_field :id %>
     <%= f.hidden_field :state %>
     <%= hidden_field_tag "bug[next_event]", event.to_s %>
     <%=
