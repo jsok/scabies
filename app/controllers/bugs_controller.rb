@@ -31,7 +31,6 @@ class BugsController < ApplicationController
     @user = get_current_user
     @project = @user.projects.find_by_id(params[:project_id])
     @bug = Bug.new(:project => @project, :creator => @user)
-    @bug.status = "new"
 
     respond_to do |format|
       if @project and @bug
@@ -85,15 +84,30 @@ class BugsController < ApplicationController
     @project = Project.find(params[:project_id])
     @bug = Bug.find(params[:id])
 
-    respond_to do |format|
-      if @bug.update_attributes(params[:bug])
-        format.html { redirect_to(project_bug_url(@project, @bug),
-                      :notice => 'Bug was successfully updated.') }
-        format.xml  { head :ok }
+    if params[:bug][:state]
+      if @bug.state != params[:bug][:state]
+        render :action => "show"
+        return
       else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @bug.errors, :status => :unprocessable_entity }
+        params[:bug].delete :state
       end
+    end
+
+    if params[:bug][:next_event]
+      next_event = @bug.verify_next_event(params[:bug][:next_event])
+      if next_event.nil?
+        render :action => "show"
+        return
+      end
+      @bug.fire_events(next_event)
+      params[:bug].delete :next_event
+    end
+
+    if @bug.update_attributes(params[:bug])
+      redirect_to(project_bug_url(@project, @bug),
+                  :notice => 'Bug was successfully updated.')
+    else
+      render :action => "edit"
     end
   end
 

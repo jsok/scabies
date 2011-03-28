@@ -11,13 +11,14 @@ class Bug < ActiveRecord::Base
       transition :new => :assigned
     end
 
-    event :open do
-      transition :assigned => :opened
+    event :reassign do
+      assignee = nil
+      transition :assigned => :new
+      transition :opened => :new
     end
 
-    event :unassign do
-      assignee = nil
-      transition :opened => :new
+    event :open do
+      transition :assigned => :opened
     end
 
     event :resolve do
@@ -33,7 +34,7 @@ class Bug < ActiveRecord::Base
     end
 
     event :reopen do
-      transition :closed => :assigned
+      transition :closed => :new
     end
 
     state :assigned do
@@ -42,23 +43,35 @@ class Bug < ActiveRecord::Base
 
   end
 
-  def valid_transitions(user)
+  def valid_events(user)
     valid = []
+
+    # Ensure the project admin can always modify bug state
+    if user == self.project.admin
+      return self.state_transitions.collect { |t| t.event }
+    end
+
+    # Otherwise restrict events to relevant users
     self.state_transitions.each do |transition|
-      logger.debug transition.human_event
-      case transition.to_name
-      when :closed
-        valid << transition if user == self.creator
-      when :opened
-        valid << transition if user == self.assignee
-        valid << transition if user == self.creator
-      when :opened, :resolved, :new
-        valid << transition if user == self.assignee
-      else
-        valid << transition
+      case transition.event
+      when :assign, :reassign
+        valid << transition.event
+      when :open, :resolve
+        valid << transition.event if user == self.assignee
+      when :close, :reject, :reopen
+        valid << transition.event if user == self.creator
       end
     end
     valid
+  end
+
+  def verify_next_event(event_name)
+    self.state_transitions.each do |transition|
+      if transition.event.to_s == event_name
+        return transition.event
+      end
+    end
+    nil
   end
 
 end
