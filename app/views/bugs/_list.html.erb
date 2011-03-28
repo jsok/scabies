@@ -4,25 +4,21 @@
   <% @bugs.each do |category, bugs| %>
     <% if bugs.present? %>
       <tr>
-        <th colspan="6"><%= category.to_s.capitalize %></th>
+        <th colspan="4"><%= category.to_s.capitalize %></th>
       </tr>
       <tr>
+        <th>ID</th>
         <th>Name</th>
         <th>Description</th>
         <th>Status</th>
-        <th></th>
-        <th></th>
-        <th></th>
       </tr>
 
       <% bugs.each do |bug| %>
         <tr>
-          <td><%= bug.name %></td>
+          <td><%= link_to bug.id, project_bug_path(bug.project, bug) %></td>
+          <td><%= link_to bug.name, project_bug_path(bug.project, bug) %></td>
           <td><%= bug.description %></td>
           <td><%= bug.status %></td>
-          <td><%= link_to 'Show', project_bug_path(bug.project, bug) %></td>
-          <td><%= link_to 'Edit', edit_project_bug_path(bug.project, bug) %></td>
-          <td><%= link_to 'Destroy', project_bug_path(bug.project, bug), :confirm => 'Are you sure?', :method => :delete %></td>
         </tr>
       <% end %>
     <% end %>

@@ -30,5 +30,6 @@
   <% end %>
 </p>
 
-<%= link_to 'Edit', edit_project_bug_path(@project, @bug) %> |
+<%= link_to 'Edit', edit_project_bug_path(@project, @bug) if @bug.creator == @user %>
+<%= link_to 'Destroy', project_bug_path(@project, @bug), :confirm => 'Are you sure?', :method => :delete if @bug.creator == @user %><br />
 <%= link_to 'Back', project_path(@project) %>

@@ -14,5 +14,5 @@
 
 <%= link_to 'New Bug', new_project_bug_path(@project) %> <br />
 
-<%= link_to 'Edit', edit_project_path(@project) %> |
+<%= link_to 'Edit', edit_project_path(@project) if @project.admin == @user %>
 <%= link_to 'Back', projects_path %>
