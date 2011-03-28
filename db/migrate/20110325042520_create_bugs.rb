@@ -3,7 +3,6 @@ class CreateBugs < ActiveRecord::Migration
     create_table :bugs do |t|
       t.string :name
       t.text :description
-      t.string :status
 
       t.timestamps
     end
