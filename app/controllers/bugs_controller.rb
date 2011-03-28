@@ -103,7 +103,7 @@ class BugsController < ApplicationController
     end
 
     if @bug.update_attributes(params[:bug])
-      @bug.fire_events(next_event)
+      @bug.fire_events(next_event) unless next_event.nil?
       redirect_to(project_bug_url(@project, @bug),
                   :notice => 'Bug was successfully updated.')
     else
