@@ -26,6 +26,15 @@
 </p>
 
 <p>
+  <b>Watchers:</b>
+  <%= @watchers.present? ? @watchers.collect{ |b| b.login }.join(", ") : "None" %>
+  <%= form_for([@project, @bug]) do |f| %>
+    <%= hidden_field_tag "bug[watcher_id]", @user.id %>
+    <%= f.submit @watcher.present? ? "Stop Watching" : "Watch" %>
+  <% end %>
+</p>
+
+<p>
 <% @bug.valid_events(@user).each do |event| %>
 
   <%= form_for([@project, @bug]) do |f| %>

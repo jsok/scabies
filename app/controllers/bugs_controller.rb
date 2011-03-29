@@ -15,6 +15,8 @@ class BugsController < ApplicationController
     @bug = @project.bugs.find_by_id(params[:id])
     @users = User.all
     @comments = @bug.comments.order("created_at DESC")
+    @watchers = @bug.watchers
+    @watcher = @bug.watchers.find_by_id(@user.id)
 
     respond_to do |format|
       if @project and @bug and @project.users.exists?(@user)
@@ -86,6 +88,17 @@ class BugsController < ApplicationController
     @project = Project.find_by_permalink(params[:project_id])
     @bug = Bug.find(params[:id])
     @user = get_current_user
+
+    if params[:bug][:watcher_id]
+      @watcher = @project.users.find_by_id(params[:bug][:watcher_id])
+      params[:bug].delete :watcher_id
+
+      if @bug.watchers.include?(@watcher)
+        @bug.watchers.delete(@watcher)
+      else
+        @bug.watchers << @watcher unless @watcher.nil?
+      end
+    end
 
     if params[:bug][:state]
       if @bug.state != params[:bug][:state]
