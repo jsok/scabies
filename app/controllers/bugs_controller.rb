@@ -100,6 +100,14 @@ class BugsController < ApplicationController
       end
     end
 
+    if params[:bug][:comment]
+      @comment = Comment.new()
+      @comment.user = @user
+      @comment.content = RedCloth.new(params[:bug][:comment][:content]).to_html
+      @bug.comments << @comment
+      params[:bug].delete :comment
+    end
+
     if params[:bug][:state]
       if @bug.state != params[:bug][:state]
         render :action => "show"

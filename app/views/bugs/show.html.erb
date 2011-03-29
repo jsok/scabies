@@ -29,8 +29,10 @@
   <b>Watchers:</b>
   <%= @watchers.present? ? @watchers.collect{ |b| b.login }.join(", ") : "None" %>
   <%= form_for([@project, @bug]) do |f| %>
+  <div class="field">
     <%= hidden_field_tag "bug[watcher_id]", @user.id %>
     <%= f.submit @watcher.present? ? "Stop Watching" : "Watch" %>
+  </div>
   <% end %>
 </p>
 
@@ -58,6 +60,15 @@
 <%= link_to 'Back', project_path(@project) %>
 
 <p><b>Comments:</b></p>
+
+<%= form_for([@project, @bug]) do |f| %>
+  <div class="field">
+    <%= text_area "bug[comment]", "content", :rows => 10, :cols => 80 %>
+  </div>
+  <div class="field">
+    <%= f.submit "Add Comment" %>
+  </div>
+<% end %>
 
 <table>
   <tr>
