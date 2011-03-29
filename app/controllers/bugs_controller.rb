@@ -94,7 +94,7 @@ class BugsController < ApplicationController
     end
 
     if params[:bug][:next_event]
-      next_event = @bug.verify_next_event(params[:bug][:next_event])
+      next_event = @bug.verify_next_event(params[:bug][:next_event], get_current_user)
       if next_event.nil?
         render :action => "show"
         return

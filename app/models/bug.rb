@@ -67,10 +67,11 @@ class Bug < ActiveRecord::Base
     valid
   end
 
-  def verify_next_event(event_name)
-    self.state_transitions.each do |transition|
-      if transition.event.to_s == event_name
-        return transition.event
+  def verify_next_event(event_name, user)
+    events = valid_events(user)
+    events.each do |event|
+      if event.to_s == event_name
+        return event
       end
     end
     nil
