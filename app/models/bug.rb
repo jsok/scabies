@@ -78,4 +78,10 @@ class Bug < ActiveRecord::Base
     nil
   end
 
+  def generate_state_comment(user, from, to)
+    comment = Comment.new(:user_id => user.id, :bug_id => self.id)
+    comment.content = "#{user.login} changed bug state from #{from} to #{to}"
+    self.comments << comment
+  end
+
 end

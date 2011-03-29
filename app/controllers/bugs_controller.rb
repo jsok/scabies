@@ -14,6 +14,7 @@ class BugsController < ApplicationController
     @project = Project.find_by_permalink(params[:project_id])
     @bug = @project.bugs.find_by_id(params[:id])
     @users = User.all
+    @comments = @bug.comments.order("created_at DESC")
 
     respond_to do |format|
       if @project and @bug and @project.users.exists?(@user)
@@ -65,6 +66,8 @@ class BugsController < ApplicationController
     @bug = Bug.new(params[:bug])
     @bug.project = @project
     @bug.creator = get_current_user
+    @bug.comments << Comment.new(:bug_id => @bug.id, :user_id => @bug.creator.id,
+                                :content => "Bug created by #{@bug.creator.login}")
 
     respond_to do |format|
       if @bug.save
@@ -83,6 +86,7 @@ class BugsController < ApplicationController
   def update
     @project = Project.find_by_permalink(params[:project_id])
     @bug = Bug.find(params[:id])
+    @user = get_current_user
 
     if params[:bug][:state]
       if @bug.state != params[:bug][:state]
@@ -94,7 +98,7 @@ class BugsController < ApplicationController
     end
 
     if params[:bug][:next_event]
-      next_event = @bug.verify_next_event(params[:bug][:next_event], get_current_user)
+      next_event = @bug.verify_next_event(params[:bug][:next_event], @user)
       if next_event.nil?
         render :action => "show"
         return
@@ -103,7 +107,12 @@ class BugsController < ApplicationController
     end
 
     if @bug.update_attributes(params[:bug])
-      @bug.fire_events(next_event) unless next_event.nil?
+      if next_event
+        transition = @bug.state_transitions.find { |t| t if t.event == next_event }
+        @bug.fire_events(next_event)
+        @bug.generate_state_comment(@user, transition.from, transition.to)
+      end
+
       redirect_to(project_bug_url(@project, @bug),
                   :notice => 'Bug was successfully updated.')
     else
