@@ -59,7 +59,7 @@
 <% @comments.each do |comment| %>
   <tr>
     <td><%= comment.user.name %></td>
-    <td><%= comment.content %></td>
+    <td><%= comment.content.html_safe %></td>
     <td><%= comment.created_at.to_s(:comment_format) %></td>
   </tr>
 <% end %>

@@ -1,3 +1,5 @@
+gem 'RedCloth'
+
 class Bug < ActiveRecord::Base
   belongs_to :project
   belongs_to :creator, :class_name => "User"
@@ -79,8 +81,14 @@ class Bug < ActiveRecord::Base
   end
 
   def generate_state_comment(user, from, to)
+    if from.nil?
+      text = "*#{user.login}* created *#{to}* bug _#{self.name}_."
+    else
+      text = "*#{user.login}* changed bug state from *#{from}* to *#{to}*."
+    end
+
     comment = Comment.new(:user_id => user.id, :bug_id => self.id)
-    comment.content = "#{user.login} changed bug state from #{from} to #{to}"
+    comment.content = RedCloth.new(text).to_html
     self.comments << comment
   end
 

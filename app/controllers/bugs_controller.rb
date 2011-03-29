@@ -66,11 +66,10 @@ class BugsController < ApplicationController
     @bug = Bug.new(params[:bug])
     @bug.project = @project
     @bug.creator = get_current_user
-    @bug.comments << Comment.new(:bug_id => @bug.id, :user_id => @bug.creator.id,
-                                :content => "Bug created by #{@bug.creator.login}")
 
     respond_to do |format|
       if @bug.save
+        @bug.generate_state_comment(@bug.creator, nil, @bug.state)
         format.html { redirect_to(project_bug_url(@project, @bug),
                       :notice => 'Bug was successfully created.') }
         format.xml  { render :xml => @bug, :status => :created, :location => @bug }
