@@ -9,6 +9,7 @@ gem 'sqlite3'
 
 gem 'state_machine', :git => 'git://github.com/pluginaweek/state_machine.git'
 gem 'ruby-graphviz', :require => 'graphviz'
+gem 'RedCloth'
 
 # Use unicorn as the web server
 # gem 'unicorn'
