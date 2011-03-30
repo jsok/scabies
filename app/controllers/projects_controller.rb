@@ -18,18 +18,7 @@ class ProjectsController < ApplicationController
   # GET /projects/1.xml
   def show
     @project = Project.find_by_permalink(params[:id])
-    @user = get_current_user
-
-    respond_to do |format|
-      if @project and @project.users.exists?(@user)
-        @bugs = @project.bugs
-
-        format.html # show.html.erb
-        format.xml  { render :xml => @project }
-      else
-        format.html { redirect_to(projects_url, :notice => 'Specified project does not exist') }
-      end
-    end
+    redirect_to project_bugs_url(params[:id])
   end
 
   # GET /projects/new
