@@ -1,10 +1,23 @@
 class BugsController < ApplicationController
   before_filter :login_required
+  helper_method :sort_column, :sort_direction
 
   # GET projects/1/bugs
   # GET projects/1/bugs.xml
   def index
-    redirect_to project_url(params[:project_id])
+    @project = Project.find_by_permalink(params[:project_id])
+    @user = get_current_user
+
+    respond_to do |format|
+      if @project and @project.users.exists?(@user)
+        @bugs = Bug.order(sort_column + " " + sort_direction)
+
+        format.html # show.html.erb
+        format.xml  { render :xml => @project }
+      else
+        format.html { redirect_to(projects_url, :notice => 'Specified project does not exist') }
+      end
+    end
   end
 
   # GET projects/1/bugs/1
@@ -155,5 +168,15 @@ class BugsController < ApplicationController
         format.html { redirect_to(projects_url, :notice => 'Specified bug does not exist') }
       end
     end
+  end
+
+  private
+
+  def sort_column
+    Bug.column_names.include?(params[:sort]) ? params[:sort] : "name"
+  end
+
+  def sort_direction
+    %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
   end
 end

@@ -2,17 +2,21 @@
 
 <table>
       <tr>
-        <th>ID</th>
+        <th><%= sortable "id", "ID" %></th>
         <th>Name</th>
         <th>Description</th>
-        <th>State</th>
+        <th><%= sortable "state" %></th>
+        <th><%= sortable "created_at" %></th>
+        <th><%= sortable "updated_at" %></th>
       </tr>
   <% @bugs.each do |bug| %>
     <tr>
-      <td><%= link_to bug.id, project_bug_path(bug.project, bug) %></td>
-      <td><%= link_to bug.name, project_bug_path(bug.project, bug) %></td>
+      <td><%= link_to bug.id, project_bug_path(bug.project.permalink, bug) %></td>
+      <td><%= link_to bug.name, project_bug_path(bug.project.permalink, bug) %></td>
       <td><%= bug.description %></td>
       <td><%= bug.state %></td>
+      <td><%= bug.created_at.to_s(:comment_format) %></td>
+      <td><%= bug.updated_at.to_s(:comment_format) %></td>
     </tr>
   <% end %>
 </table>
