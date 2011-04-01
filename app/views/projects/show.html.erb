@@ -1,18 +1,1 @@
-<p id="notice"><%= notice %></p>
-
-<p>
-  <b>Project:</b>
-  <%= @project.name %>
-</p>
-
-<p>
-  <b>Description:</b>
-  <%= @project.description %>
-</p>
-
-<%= render :partial => 'bugs/list', :locals => { :title => 'Project Bugs' } %>
-
-<%= link_to 'New Bug', new_project_bug_path(@project) %> <br />
-
-<%= link_to 'Edit', edit_project_path(@project) if @project.admin == @user %>
-<%= link_to 'Back', projects_path %>
+<!-- Unused: see bugs/index -->
