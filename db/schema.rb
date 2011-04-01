@@ -15,7 +15,6 @@ ActiveRecord::Schema.define(:version => 20110329015503) do
   create_table "bugs", :force => true do |t|
     t.string   "name"
     t.text     "description"
-    t.string   "status"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "project_id"
