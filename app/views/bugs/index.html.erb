@@ -1,3 +1,9 @@
-<%= render :partial =>'list', :locals => { :title => 'Project Bugs' } %>
+<div class="column grid_7">
+  New | Assigned | Opened | Resolved | Closed | All
+  <%= render :partial =>'list', :locals => { :title => 'All Bugs' } %>
+</div>
 
-<%= link_to 'New Bug', new_project_bug_path(@project) %> <br />
+<div class="column grid_3">
+  <%= render :partial =>'projects/details' %>
+  <%= link_to 'New Bug', new_project_bug_path(@project) %> <br />
+</div>

@@ -1,9 +1,13 @@
-<h1>Login to Scabies</h1>
+<div class="column grid_7">
+<h1>Login</h1>
 
 <p id="notice"><%= notice %></p>
 
 <%= form_for(@user, :url => user_index_path) do |f| %>
   <%= render :partial => 'form', :locals => {:f => f, :mode => "login"} %>
 <% end %>
+Not Registered? <%= link_to "Sign Up", signup_path %>
+</div>
 
-<%= link_to "Sign Up", signup_path %>
+<div class="column grid_3">
+</div>

@@ -1,7 +1,14 @@
+<div class="column grid_7">
 <h1>Signup for Scabies</h1>
 
 <p id="notice"><%= notice %></p>
 
+<p>Once you've got scabies, you'll wonder how you ever lived without it!</p>
+
 <%= form_for(@user, :url => user_index_path) do |f| %>
   <%= render :partial => 'form', :locals => {:f => f, :mode => "signup"} %>
 <% end %>
+</div>
+
+<div class="column grid_3">
+</div>

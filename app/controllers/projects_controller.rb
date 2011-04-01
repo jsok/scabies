@@ -38,7 +38,8 @@ class ProjectsController < ApplicationController
   # GET /projects/1/edit
   def edit
     @project = Project.find_by_permalink(params[:id])
-    @admin = get_current_user
+    @user = get_current_user
+    @admin = @project.admin
     @users = User.find_all_without_user(@admin)
     if @project.nil?
       redirect_to(projects_url, :notice => 'Specified project does not exist')

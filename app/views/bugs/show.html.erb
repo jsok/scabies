@@ -1,86 +1,104 @@
-<p id="notice"><%= notice %></p>
+<div class="row">
+  <div class="column grid_7">
+    <%= link_to "Back to #{@project.name}", project_path(@project) %>
 
-<p>
-  <b>Name:</b>
-  <%= @bug.name %>
-</p>
+    <p id="notice"><%= notice %></p>
 
-<p>
-  <b>Description:</b>
-  <%= @bug.description %>
-</p>
+    <p>
+    <b>Name:</b>
+    <%= @bug.name %>
+    </p>
 
-<p>
-  <b>State:</b>
-  <%= @bug.state %>
-</p>
+    <p>
+    <b>Description:</b>
+    <%= @bug.description %>
+    </p>
 
-<p>
-  <b>Created by:</b>
-  <%= @bug.creator.login.to_s + " <" + @bug.creator.email.to_s + ">" %>
-</p>
+    <p>
+    <b>State:</b>
+    <%= @bug.state %>
+    </p>
 
-<p>
-  <b>Assigned to:</b>
-  <%= @bug.assignee.present? ? @bug.assignee.login.to_s + " <" + @bug.assignee.email.to_s + ">" : "Unassigned" %>
-</p>
+    <p>
+    <% @bug.valid_events(@user).each do |event| %>
 
-<p>
-  <b>Watchers:</b>
-  <%= @watchers.present? ? @watchers.collect{ |b| b.login }.join(", ") : "None" %>
-  <%= form_for([@project, @bug]) do |f| %>
-  <div class="field">
-    <%= hidden_field_tag "bug[watcher_id]", @user.id %>
-    <%= f.submit @watcher.present? ? "Stop Watching" : "Watch" %>
+      <%= form_for([@project, @bug]) do |f| %>
+        <%= f.hidden_field :state %>
+        <%= hidden_field_tag "bug[next_event]", event.to_s %>
+        <%=
+          begin
+            render :partial => "#{@bug.state.to_s}", :locals => {:f => f}
+          rescue
+            nil
+          end
+        %>
+        <%= f.submit "#{event.to_s.capitalize}" %>
+      <% end %>
+
+    <% end %>
+    </p>
+
+    <p><b>Comments:</b></p>
+
+    <%= form_for([@project, @bug]) do |f| %>
+      <div class="field">
+        <%= text_area "bug[comment]", "content", :rows => 10, :cols => 80 %>
+      </div>
+      <div class="field">
+        <%= f.submit "Post Comment" %>
+      </div>
+    <% end %>
+
+    <p>
+    <b>Filter:</b> Bug Events | User Comments | All
+    </p>
+
+    <table>
+      <tr>
+        <th>User</th>
+        <th>Comment</th>
+        <th>Date</th>
+      </tr>
+      <% @comments.each do |comment| %>
+        <tr>
+          <td><%= comment.user.name %></td>
+          <td><%= comment.content.html_safe %></td>
+          <td><%= comment.created_at.to_s(:comment_format) %></td>
+        </tr>
+      <% end %>
+    </table>
+
   </div>
-  <% end %>
-</p>
 
-<p>
-<% @bug.valid_events(@user).each do |event| %>
+  <div class="column grid_3">
+    <p>
+    <b>Created by:</b> <br />
+    <%= @bug.creator.login.to_s + " <" + @bug.creator.email.to_s + ">" %>
+    </p>
 
-  <%= form_for([@project, @bug]) do |f| %>
-    <%= f.hidden_field :state %>
-    <%= hidden_field_tag "bug[next_event]", event.to_s %>
-    <%=
-      begin
-        render :partial => "#{@bug.state.to_s}", :locals => {:f => f}
-      rescue
-        nil
-      end
-    %>
-    <%= f.submit "#{event.to_s.capitalize}" %>
-  <% end %>
+    <p>
+    <b>Assigned to:</b> <br />
+    <%= @bug.assignee.present? ? @bug.assignee.login.to_s + " <" + @bug.assignee.email.to_s + ">" : "Unassigned" %>
+    </p>
 
-<% end %>
-</p>
+    <p>
+    <b>Watchers:</b> <br />
+    <%= @watchers.present? ? @watchers.collect{ |b| b.login }.join(", ") : "None" %>
+    <%= form_for([@project, @bug]) do |f| %>
+      <div class="field">
+        <%= hidden_field_tag "bug[watcher_id]", @user.id %>
+        <%= f.submit @watcher.present? ? "Stop Watching" : "Watch" %>
+      </div>
+    <% end %>
+    </p>
 
-<%= link_to 'Edit', edit_project_bug_path(@project, @bug) if @bug.creator == @user %>
-<%= link_to 'Destroy', project_bug_path(@project, @bug), :confirm => 'Are you sure?', :method => :delete if @bug.creator == @user %><br />
-<%= link_to 'Back', project_path(@project) %>
-
-<p><b>Comments:</b></p>
-
-<%= form_for([@project, @bug]) do |f| %>
-  <div class="field">
-    <%= text_area "bug[comment]", "content", :rows => 10, :cols => 80 %>
+    <%= link_to 'Edit Bug Details', edit_project_bug_path(@project, @bug) if @bug.creator == @user %>
+    <br />
+    <%= link_to 'Delete Bug', project_bug_path(@project, @bug), :confirm => 'Are you sure?', :method => :delete if @bug.creator == @user %><br />
   </div>
-  <div class="field">
-    <%= f.submit "Add Comment" %>
-  </div>
-<% end %>
 
-<table>
-  <tr>
-    <th>User</th>
-    <th>Comment</th>
-    <th>Date</th>
-  </tr>
-<% @comments.each do |comment| %>
-  <tr>
-    <td><%= comment.user.name %></td>
-    <td><%= comment.content.html_safe %></td>
-    <td><%= comment.created_at.to_s(:comment_format) %></td>
-  </tr>
-<% end %>
-</table>
+</div>
+<div class="row">
+  <div class="column grid_10">
+  </div>
+</div>
