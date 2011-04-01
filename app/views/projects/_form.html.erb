@@ -30,10 +30,12 @@
       <%# f.collection_select :admin_id, @users, :id, :email, { :selected => @project.admin_id } %>
     </div>
     -->
+    <% if @users.size > 0 %>
     <div class="field">
       <%= f.label :users %><br />
       <%= f.collection_select :user_ids, @users, :id, :email, { :selected =>  @project.user_ids }, { "multiple" => true, "size" => 10 } %>
     </div>
+    <% end %>
   <% end %>
   <div class="actions">
     <%= f.submit %>

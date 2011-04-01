@@ -43,8 +43,8 @@ class ProjectsController < ApplicationController
     @users = User.find_all_without_user(@admin)
     if @project.nil?
       redirect_to(projects_url, :notice => 'Specified project does not exist')
-    elsif @project.admin != @admin
-      redirect_to(projects_url, :notice => 'You cannot edit this project')
+    elsif @project.admin != @user
+      redirect_to(project_bugs_url(@project), :notice => 'You cannot edit this project')
     end
   end
 
