@@ -10,7 +10,7 @@ class BugsController < ApplicationController
 
     respond_to do |format|
       if @project and @project.users.exists?(@user)
-        @bugs = Bug.order(sort_column + " " + sort_direction)
+        @bugs = @project.bugs.order(sort_column + " " + sort_direction)
 
         format.html # show.html.erb
         format.xml  { render :xml => @project }
