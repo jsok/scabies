@@ -1,5 +1,3 @@
-gem 'RedCloth'
-
 class Bug < ActiveRecord::Base
   belongs_to :project
   belongs_to :creator, :class_name => "User"
@@ -95,8 +93,7 @@ class Bug < ActiveRecord::Base
       text = "*#{user.login}* changed bug state from *#{from}* to *#{to}*."
     end
 
-    comment = Comment.new(:user_id => user.id, :bug_id => self.id)
-    comment.content = RedCloth.new(text).to_html
+    comment = Comment.new(:user_id => user.id, :bug_id => self.id, :content => text)
     self.comments << comment
   end
 
