@@ -1,7 +1,11 @@
 <div class="column grid_7">
-  Assigned | Opened | Resolved | Watching | All
+  <%= link_to "All" %> |
+  <%= link_to "Assigned", {:state => "assigned"} %> |
+  <%= link_to "Open", {:state => "opened"} %> |
+  <%= link_to "Resolved", {:state => "resolved"} %> |
+  <%= link_to "Watching", {:watching => "1"} %>
 
-<%= render :partial => 'bugs/list', :locals => { :title => 'Assigned Bugs' } %>
+  <%= render :partial => 'bugs/list', :locals => { :show_project => true } %>
 
 </div>
 

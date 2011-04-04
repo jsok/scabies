@@ -13,7 +13,7 @@ class UserController < ApplicationController
   # GET /user/1
   def show
     @user = get_current_user()
-    @bugs = Bug.find_all_by_assignee_id(@user)
+    @bugs = Bug.filter(params, {:assignee => @user, :watcher => @user})
   end
 
   # GET /user/new

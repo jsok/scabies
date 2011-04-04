@@ -1,6 +1,5 @@
 class BugsController < ApplicationController
   before_filter :login_required
-  helper_method :sort_column, :sort_direction
 
   # GET projects/1/bugs
   # GET projects/1/bugs.xml
@@ -10,7 +9,8 @@ class BugsController < ApplicationController
 
     respond_to do |format|
       if @project and @project.users.exists?(@user)
-        @bugs = @project.bugs.order(sort_column + " " + sort_direction)
+
+        @bugs = Bug.filter(params, {:project => @project})
 
         format.html # show.html.erb
         format.xml  { render :xml => @project }
@@ -170,13 +170,4 @@ class BugsController < ApplicationController
     end
   end
 
-  private
-
-  def sort_column
-    Bug.column_names.include?(params[:sort]) ? params[:sort] : "updated_at"
-  end
-
-  def sort_direction
-    %w[asc desc].include?(params[:direction]) ? params[:direction] : "desc"
-  end
 end

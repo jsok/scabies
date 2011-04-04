@@ -1,8 +1,16 @@
+<%
+    title = bug_list_title if local_assigns[:title].nil?
+    show_project = false if local_assigns[:show_project].nil?
+%>
+
 <h2><%= title %></h2>
 
 <table>
       <tr>
         <th><%= sortable "id", "ID" %></th>
+        <% if show_project == true %>
+        <th><%= sortable "project_id", "Project" %></th>
+         <% end %>
         <th>Name</th>
         <th>Description</th>
         <th><%= sortable "state" %></th>
@@ -12,6 +20,9 @@
   <% @bugs.each do |bug| %>
     <tr>
       <td><%= link_to bug.id, project_bug_path(bug.project.permalink, bug) %></td>
+      <% if show_project == true %>
+      <td> <%= link_to bug.project.name, project_path(bug.project) %> </td>
+      <% end %>
       <td><%= link_to bug.name, project_bug_path(bug.project.permalink, bug) %></td>
       <td><%= bug.description %></td>
       <td><%= bug.state %></td>

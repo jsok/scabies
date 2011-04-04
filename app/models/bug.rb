@@ -7,6 +7,14 @@ class Bug < ActiveRecord::Base
   has_and_belongs_to_many :watchers, :class_name => "User", :join_table => "users_watched_bugs"
   has_many :comments, :dependent => :destroy
 
+  scope :by_assignee, lambda { |*user| {:conditions => {:assignee_id => user}} }
+  scope :by_watcher, lambda { |*watcher|
+    {
+      :joins => :watchers,
+      :conditions => ["users_watched_bugs.user_id = #{watcher[0].id}"]
+    }
+  }
+
   attr_protected :state_event
   state_machine :initial => :new do
 
@@ -90,6 +98,32 @@ class Bug < ActiveRecord::Base
     comment = Comment.new(:user_id => user.id, :bug_id => self.id)
     comment.content = RedCloth.new(text).to_html
     self.comments << comment
+  end
+
+  def self.valid_state(state)
+    return Bug.state_machine.states.keys.include?(state.to_sym)
+  end
+
+  def self.filter(params, options = {})
+    scope = Bug.scoped({})
+
+    if params[:watching]
+      scope = scope.by_watcher(options[:watcher])
+    else
+      scope = scope.scoped :conditions => {:assignee_id => options[:assignee]} if options[:assignee]
+      scope = scope.scoped :conditions => {:project_id => options[:project]} if options[:project]
+    end
+
+
+    if params[:state] and self.valid_state(params[:state])
+      scope = scope.scoped :conditions => {:state => params[:state]}
+    end
+
+    if params[:sort] and Bug.column_names.include?(params[:sort])
+      direction = %w[asc desc].include?(params[:direction]) ? params[:direction] : "desc"
+      scope = scope.scoped :order => (params[:sort] + " " + direction)
+    end
+    scope
   end
 
 end
