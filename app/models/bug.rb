@@ -12,6 +12,8 @@ class Bug < ActiveRecord::Base
       :conditions => ["users_watched_bugs.user_id = #{watcher[0].id}"]
     }
   }
+  scope :outstanding_bugs, lambda { |bug| bug ? {:conditions => ["state != ?", "closed"]} : {} }
+
 
   attr_protected :state_event
   state_machine :initial => :new do

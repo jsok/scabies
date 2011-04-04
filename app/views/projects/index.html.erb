@@ -5,12 +5,16 @@
   <tr>
     <th>Name</th>
     <th>Description</th>
+    <th>Outstanding Bugs</th>
+    <th>Total Bugs</th>
   </tr>
 
 <% @projects.each do |project| %>
   <tr>
     <td><%= link_to project.name, project %></td>
     <td><%= project.description %></td>
+    <td align="center"><%= project.bugs.outstanding_bugs(project.bugs).size %></td>
+    <td align="center"><%= project.bugs.size %></td>
   </tr>
 <% end %>
 </table>
