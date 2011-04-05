@@ -9,7 +9,7 @@
 
     <p>
     <b>Description:</b>
-    <%= @bug.description %>
+    <td><%= RedCloth.new(@bug.description).to_html.html_safe %></td>
     </p>
 
     <p>
