@@ -13,7 +13,7 @@
   <tr>
     <td><%= link_to project.name, project %></td>
     <td><%= project.description %></td>
-    <td align="center"><%= project.bugs.outstanding_bugs(project.bugs).size %></td>
+    <td align="center"><%= project.bugs.active_bugs.size %></td>
     <td align="center"><%= project.bugs.size %></td>
   </tr>
 <% end %>

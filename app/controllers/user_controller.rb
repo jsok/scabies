@@ -13,6 +13,7 @@ class UserController < ApplicationController
   # GET /user/1
   def show
     @user = get_current_user()
+    params[:state] = "active" unless params[:state]
     @bugs = Bug.filter(params, {:assignee => @user, :watcher => @user})
   end
 

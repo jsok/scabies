@@ -10,6 +10,7 @@ class BugsController < ApplicationController
     respond_to do |format|
       if @project and @project.users.exists?(@user)
 
+        params[:state] = "active" unless params[:state]
         @bugs = Bug.filter(params, {:project => @project})
 
         format.html # show.html.erb

@@ -12,7 +12,7 @@ class Bug < ActiveRecord::Base
       :conditions => ["users_watched_bugs.user_id = #{watcher[0].id}"]
     }
   }
-  scope :outstanding_bugs, lambda { |bug| bug ? {:conditions => ["state != ?", "closed"]} : {} }
+  scope :active_bugs, :conditions => ["state != ?", "closed"]
 
 
   attr_protected :state_event
@@ -114,8 +114,17 @@ class Bug < ActiveRecord::Base
     end
 
 
-    if params[:state] and self.valid_state(params[:state])
-      scope = scope.scoped :conditions => {:state => params[:state]}
+    if params[:state]
+      if self.valid_state(params[:state])
+        scope = scope.scoped :conditions => {:state => params[:state]}
+      else
+        case params[:state]
+        when "active"
+          scope = scope.active_bugs
+        when "all"
+          # don't scope if we want all bugs
+        end
+      end
     end
 
     if params[:sort] and Bug.column_names.include?(params[:sort])

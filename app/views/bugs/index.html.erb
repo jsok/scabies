@@ -1,10 +1,11 @@
 <div class="column grid_7">
-  <%= link_to "All" %> |
+  <%= link_to "Active", {:state => "active"} %> |
   <%= link_to "New", {:state => "new"} %> |
   <%= link_to "Assigned", {:state => "assigned"} %> |
   <%= link_to "Open", {:state => "opened"} %> |
   <%= link_to "Resolved", {:state => "resolved"} %> |
-  <%= link_to "Closed", {:state => "closed"} %>
+  <%= link_to "Closed", {:state => "closed"} %> |
+  <%= link_to "All", {:state => "all"} %>
   <%= render :partial =>'list', :locals => { } %>
 </div>
 
