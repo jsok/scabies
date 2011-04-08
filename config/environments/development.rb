@@ -16,6 +16,16 @@ Scabies::Application.configure do
 
   # Don't care if the mailer can't send
   config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.perform_deliveries = true
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    :logger               => Rails.logger,
+    :address              => "smtp.nsw.exemail.com.au",
+    :port                 => 25,
+    :domain               => 'soko.id.au',
+    :authentication       => :login,
+    :enable_starttls_auto => false
+} 
 
   # Print deprecation notices to the Rails logger
   config.active_support.deprecation = :log
