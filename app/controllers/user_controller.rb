@@ -51,11 +51,12 @@ class UserController < ApplicationController
       # Password reset request
       elsif params[:user][:email].present?
         @user = User.find_by_email(params[:user][:email])
-        if @user and email = @user.send_new_password
-          email.deliver
-          redirect_to(login_url, :notice => "A new password has been sent by email.")
-        else
-          redirect_to(login_url)
+        if @user
+          if @user.send_new_password.deliver
+            redirect_to(login_url, :notice => "A new password has been sent by email.")
+          else
+            redirect_to(login_url)
+          end
         end
       end
 
