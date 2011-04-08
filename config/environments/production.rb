@@ -40,7 +40,7 @@ Scabies::Application.configure do
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
     :logger               => Rails.logger,
-    :address              => "127.0.0.1"
+    :address              => "127.0.0.1",
     :port                 => 25,
     :domain               => 'soko.id.au',
     :authentication       => :login,
