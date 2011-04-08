@@ -31,17 +31,32 @@ class UserController < ApplicationController
     @user = get_current_user
   end
 
+  def reset
+  end
+
   # POST /user
   def create
     @user = User.new(params[:user])
     # Are we logging in?
     if !params[:user][:password_confirmation].present?
-      @user = User.authenticate(@user.login, @user.password)
-      if @user.nil?
-        redirect_to(login_url, :notice => 'Login was unsuccessful.')
-      else
-        session[:user] = @user.login
-        redirect_to_stored
+      if params[:user][:login].present?
+        @user = User.authenticate(@user.login, @user.password)
+        if @user.nil?
+          redirect_to(login_url, :notice => 'Login was unsuccessful.')
+        else
+          session[:user] = @user.login
+          redirect_to_stored
+        end
+
+      # Password reset request
+      elsif params[:user][:email].present?
+        @user = User.find_by_email(params[:user][:email])
+        if @user and email = @user.send_new_password
+          email.deliver
+          redirect_to(login_url, :notice => "A new password has been sent by email.")
+        else
+          redirect_to(login_url)
+        end
       end
 
     # We are signing up a new account

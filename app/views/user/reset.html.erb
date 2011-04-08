@@ -1,0 +1,17 @@
+<h1>Reset Password</h1>
+
+<%= form_for(:user, :url => user_index_path) do |f| %>
+  <div class="field">
+    <%= f.label :email %><br />
+    <%= f.text_field :email %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "Reset Password" %>
+  </div>
+
+<% end %>
+
+Not Registered? <%= link_to "Sign Up", signup_path %> <br />
+Remember your password? <%= link_to "Login", login_path %>
+

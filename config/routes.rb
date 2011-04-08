@@ -6,6 +6,7 @@ Scabies::Application.routes.draw do
   resources :user
 
   match '/signup',    :controller => 'user', :action => 'new'
+  match '/reset',     :controller => 'user', :action => 'reset'
   match '/dashboard', :controller => 'user', :action => 'show'
   match '/login',     :controller => 'user', :action => 'index'
   match '/logout',    :controller => 'user', :action => 'logout'
