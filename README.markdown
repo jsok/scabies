@@ -34,4 +34,4 @@ Bug States
 ---------------------
 state_machine has been used to enforce a pattern of workflow:
 
-![Bug State Machine](https://github.com/sokjon/scabies/raw/master/state_machine.png)
+![Bug State Machine](https://github.com/jsok/scabies/raw/master/state_machine.png)
